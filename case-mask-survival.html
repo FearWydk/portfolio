@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mask Survival — Case Study | Josh Brooks</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+
+  /* ── NAV ACTIVE / HAMBURGER COLOR UPDATE ── */
+  .nav-hamburger span { background: #E32132; }
+  .nav-links a:hover,
+  .nav-links a.active { color: #E32132; border-bottom-color: #E32132; }
+
+  /* ── CASE STUDY HERO ── */
+  .cs-hero {
+    position: relative;
+    min-height: 420px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .cs-hero-bg {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.35) saturate(0.8);
+    transform: scale(1.04);
+    transition: transform 8s ease;
+  }
+  .cs-hero:hover .cs-hero-bg { transform: scale(1.0); }
+  .cs-hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(35,39,47,0.6) 60%,
+      var(--bg-dark) 100%
+    );
+  }
+  .cs-hero-content {
+    position: relative; z-index: 2;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .cs-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition: color 0.2s;
+  }
+  .cs-back:hover { color: var(--cyan); }
+  .cs-badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .cs-chip {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    background: rgba(34,211,238,0.08);
+  }
+  .cs-chip.red { color: #E32132; border-color: rgba(227,33,50,0.4); background: rgba(132,0,5,0.15); }
+  .cs-chip.purple { color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); }
+  .cs-title {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 58px);
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 12px;
+  }
+  .cs-subtitle {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.6);
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  /* ── META BAR ── */
+  .cs-meta {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-meta-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    overflow-x: auto;
+  }
+  .cs-meta-item {
+    padding: 18px 0;
+    flex-shrink: 0;
+  }
+  .cs-meta-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .cs-meta-value {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--white);
+    letter-spacing: 0.5px;
+  }
+  .cs-meta-value a {
+    color: var(--cyan);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .cs-meta-value a:hover { opacity: 0.7; }
+
+  /* ── BODY LAYOUT ── */
+  .cs-body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 64px 40px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 64px;
+    align-items: start;
+  }
+
+  /* ── SECTIONS ── */
+  .cs-section {
+    margin-bottom: 64px;
+  }
+  .cs-section:last-child { margin-bottom: 0; }
+  .cs-section-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #E32132;
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+  .cs-section-title {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  .cs-section-rule {
+    width: 32px; height: 2px;
+    background: linear-gradient(90deg, #E32132, transparent);
+    margin-bottom: 24px;
+  }
+  .cs-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+  .cs-text:last-child { margin-bottom: 0; }
+
+  /* ── IMPLEMENTATION LIST ── */
+  .cs-impl-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .cs-impl-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .cs-impl-list li:hover {
+    border-left-color: #E32132;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .impl-icon {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    min-width: 24px;
+  }
+  .impl-text {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+  }
+  .impl-text strong {
+    font-weight: 600;
+    color: var(--white);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ── IMPACT STATS ── */
+  .cs-impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .impact-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    text-align: center;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .impact-card:hover {
+    border-color: rgba(34,211,238,0.4);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .impact-num {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--cyan);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .impact-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ── TAKEAWAY ── */
+  .cs-takeaway {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid #E32132;
+    border-radius: var(--radius);
+    padding: 28px 28px 28px 24px;
+    margin-top: 8px;
+  }
+  .cs-takeaway p {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+  .cs-takeaway p:last-child { margin-bottom: 0; }
+
+  /* ── MEDIA GALLERY ── */
+  .cs-gallery {
+    margin-top: 8px;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .gallery-item {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .gallery-item:hover {
+    border-color: rgba(34,211,238,0.4);
+    transform: translateY(-2px);
+  }
+  .gallery-item.wide {
+    grid-column: span 2;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 160px;
+    max-height: 280px;
+  }
+  /* video embed */
+  .gallery-video {
+    position: relative;
+    padding-top: 56.25%;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .gallery-video iframe {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+  .gallery-video.wide { grid-column: span 2; }
+
+  /* lightbox */
+  .lightbox {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 20px; right: 24px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+  }
+  .lightbox-close:hover { color: var(--white); }
+
+  /* ── SIDEBAR ── */
+  .cs-sidebar {
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .sidebar-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .sidebar-block-title {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    opacity: 0.7;
+    margin-bottom: 14px;
+  }
+  .tech-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    background: rgba(34,211,238,0.06);
+    margin: 0 4px 6px 0;
+  }
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    color: var(--white);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: background 0.2s, border-color 0.2s;
+    margin-bottom: 8px;
+  }
+  .sidebar-link:last-child { margin-bottom: 0; }
+  .sidebar-link:hover { background: rgba(34,211,238,0.08); border-color: rgba(34,211,238,0.4); }
+  .sidebar-link .link-icon {
+    font-size: 14px;
+    color: var(--cyan);
+  }
+
+  /* ── PAGINATION ── */
+  .cs-pagination {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 40px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .cs-pag-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .cs-pag-btn:hover { color: var(--cyan); }
+  .cs-pag-btn .pag-title {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0;
+    text-transform: none;
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .cs-body { grid-template-columns: 1fr; gap: 40px; padding: 40px 20px; }
+    .cs-sidebar { position: static; }
+    .cs-hero-content { padding: 32px 20px; }
+    .cs-meta-inner { padding: 0 20px; gap: 24px; }
+    .cs-impact-grid { grid-template-columns: repeat(2,1fr); }
+    .cs-pagination { padding: 24px 20px 48px; }
+    .gallery-grid { grid-template-columns: 1fr; }
+    .gallery-item.wide, .gallery-video.wide { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-logo">
+    <img src="https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/users/c1eed976-c0aa-4ad0-b243-b94461a41cc9/design-previews/214d02a4-6cc4-48d9-95d4-596dc8450f7b/1761703744191-transparentThumbnail.png" alt="Josh Brooks Logo"/>
+    <span class="nav-logo-text">Josh Brooks</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="professional.html">Professional</a></li>
+    <li><a href="personal.html" class="active">Personal</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="cs-hero">
+  <div class="cs-hero-bg" style="background-image: url('https://static.wixstatic.com/media/c1eed9_f69158f7b1974edf858ec41639141a87~mv2.jpg');"></div>
+  <div class="cs-hero-content">
+    <a class="cs-back" href="personal.html">← Back to Personal Projects</a>
+    <div class="cs-badge-row">
+      <span class="cs-chip">Personal</span>
+      <span class="cs-chip">UE5</span>
+      <span class="cs-chip">Blueprints</span>
+      <span class="cs-chip red">Shipped</span>
+    </div>
+    <h1 class="cs-title">Mask Survival</h1>
+    <p class="cs-subtitle">A stealth survival game — collect four Oni masks from a Monster House while evading faction-aware enemy AI.</p>
+  </div>
+</div>
+
+<!-- META BAR -->
+<div class="cs-meta">
+  <div class="cs-meta-inner">
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Timeline</p>
+      <p class="cs-meta-value">Feb 2026 — May 2026</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Role</p>
+      <p class="cs-meta-value">Solo Developer</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Engine</p>
+      <p class="cs-meta-value">Unreal Engine 5</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Platform</p>
+      <p class="cs-meta-value">PC (Windows)</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Status</p>
+      <p class="cs-meta-value"><a href="https://fear-wydk.itch.io/mask-survival" target="_blank" rel="noopener">Shipped → itch.io ↗</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="cs-body">
+
+  <!-- MAIN CONTENT -->
+  <main>
+
+    <!-- PURPOSE -->
+    <div class="cs-section">
+      <p class="cs-section-label">// 01</p>
+      <h2 class="cs-section-title">Purpose</h2>
+      <div class="cs-section-rule"></div>
+      <p class="cs-text">
+        Mask Survival was built as a 12-week solo project to prove end-to-end game development capability — from AI architecture and gameplay systems to audio production and shipping on a public platform.
+      </p>
+      <p class="cs-text">
+        The core design challenge was building a stealth game where enemy AI felt genuinely threatening without being frustrating. Each enemy needed to belong to a faction with distinct behavioral rules, respond to both sight and sound, and coordinate with other enemies on alert — all within Unreal Engine 5's Blueprint system.
+      </p>
+    </div>
+
+    <!-- IMPLEMENTATION -->
+    <div class="cs-section">
+      <p class="cs-section-label">// 02</p>
+      <h2 class="cs-section-title">Implementation</h2>
+      <div class="cs-section-rule"></div>
+      <p class="cs-text">The project was built entirely in UE5 Blueprints with a focus on modular, reusable systems.</p>
+      <ul class="cs-impl-list">
+        <li>
+          <span class="impl-icon">01</span>
+          <div class="impl-text">
+            <strong>Faction-Aware Enemy AI</strong>
+            Behavior Tree architecture with per-faction patrol, chase, and alert states. Each enemy type belongs to a faction that shares alert status — when one sees the player, nearby allies escalate.
+          </div>
+        </li>
+        <li>
+          <span class="impl-icon">02</span>
+          <div class="impl-text">
+            <strong>AI Perception System</strong>
+            Dual-sense perception using UE5's AIPerception component — sight cone for visual detection and hearing radius for sound events. Per-actor handling via OnTargetPerceptionUpdated with bool guards to prevent duplicate broadcasts.
+          </div>
+        </li>
+        <li>
+          <span class="impl-icon">03</span>
+          <div class="impl-text">
+            <strong>Throwable Decoy System</strong>
+            Hearing decoy using ReportNoiseEvent with bool guards. Players throw decoys to redirect AI patrol paths, creating strategic windows for movement.
+          </div>
+        </li>
+        <li>
+          <span class="impl-icon">04</span>
+          <div class="impl-text">
+            <strong>Struct-Based Mask Inventory</strong>
+            Multi-mask inventory using a struct array. Resolved an enum index offset bug and stale array index issues discovered during debugging. Each mask carries unique properties driving gameplay state changes.
+          </div>
+        </li>
+        <li>
+          <span class="impl-icon">05</span>
+          <div class="impl-text">
+            <strong>NavMesh & Movement</strong>
+            Non-latent AIMoveTo fix via BTService + Blackboard Vector key. Debugged three distinct NavMesh failures including dynamic obstacle recalculation issues.
+          </div>
+        </li>
+        <li>
+          <span class="impl-icon">06</span>
+          <div class="impl-text">
+            <strong>Audio Pipeline</strong>
+            Original soundtrack produced in Ardour/Audacity using LANDR samples across five tracks. Implemented via CreateSound2D stored in the Game Instance for persistent audio across level loads.
+          </div>
+        </li>
+        <li>
+          <span class="impl-icon">07</span>
+          <div class="impl-text">
+            <strong>Packaging & Shipping</strong>
+            Resolved shader compiler hang on packaging by disabling Lumen/Nanite and clearing DDC cache. Fixed packaged build Open Level failure. Shipped to itch.io with full build verification.
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- IMPACT -->
+    <div class="cs-section">
+      <p class="cs-section-label">// 03</p>
+      <h2 class="cs-section-title">Impact</h2>
+      <div class="cs-section-rule"></div>
+      <p class="cs-text">Mask Survival demonstrates full solo development ownership — design, programming, audio, and shipping — in a single 12-week sprint.</p>
+      <div class="cs-impact-grid">
+        <div class="impact-card">
+          <p class="impact-num">12</p>
+          <p class="impact-label">Week Solo Sprint</p>
+        </div>
+        <div class="impact-card">
+          <p class="impact-num">3+</p>
+          <p class="impact-label">Enemy Factions Built</p>
+        </div>
+        <div class="impact-card">
+          <p class="impact-num">5</p>
+          <p class="impact-label">Original Audio Tracks</p>
+        </div>
+        <div class="impact-card">
+          <p class="impact-num">7</p>
+          <p class="impact-label">Major Systems Shipped</p>
+        </div>
+        <div class="impact-card">
+          <p class="impact-num">itch</p>
+          <p class="impact-label">Publicly Shipped</p>
+        </div>
+        <div class="impact-card">
+          <p class="impact-num">UE5</p>
+          <p class="impact-label">Blueprints Only</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDIA GALLERY -->
+    <div class="cs-section">
+      <p class="cs-section-label">// 04</p>
+      <h2 class="cs-section-title">Media Gallery</h2>
+      <div class="cs-section-rule"></div>
+      <p class="cs-text" style="margin-bottom:20px;">Screenshots, gameplay footage, and development captures.</p>
+
+      <div class="cs-gallery">
+        <div class="gallery-grid">
+
+          <!-- Wide hero image -->
+          <div class="gallery-item wide" onclick="openLightbox(this)">
+            <img src="https://static.wixstatic.com/media/c1eed9_f69158f7b1974edf858ec41639141a87~mv2.jpg" alt="Mask Survival — Hero"/>
+          </div>
+
+          <!-- ✏️ ADD YOUR YOUTUBE VIDEO EMBED HERE -->
+          <!-- Replace VIDEO_ID with your YouTube video ID -->
+          <!--
+          <div class="gallery-video wide">
+            <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Mask Survival Gameplay" allowfullscreen></iframe>
+          </div>
+          -->
+
+          <!-- ✏️ ADD MORE SCREENSHOTS HERE — copy a gallery-item block -->
+          <!-- Example:
+          <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="YOUR_IMAGE_URL" alt="Description"/>
+          </div>
+          -->
+
+        </div>
+      </div>
+    </div>
+
+    <!-- TAKEAWAY -->
+    <div class="cs-section">
+      <p class="cs-section-label">// 05</p>
+      <h2 class="cs-section-title">Takeaway</h2>
+      <div class="cs-section-rule"></div>
+      <div class="cs-takeaway">
+        <p>Mask Survival proved I can own the full development loop — designing systems, debugging complex AI interactions, producing original audio, and shipping a packaged build to a public platform solo and on deadline.</p>
+        <p>The most significant technical growth came from debugging multi-system interactions: AI Perception conflicts, NavMesh failures, and packaging errors that only surface in a shipped build. Each one required reading UE5 internals rather than surface-level fixes.</p>
+        <p>The project directly informs Yoruba Hearts — the faction-aware AI architecture, Behavior Tree patterns, and modular inventory design from Mask Survival are the foundation I'm scaling for the larger action RPG system.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="cs-sidebar">
+
+    <div class="sidebar-block">
+      <p class="sidebar-block-title">Tech Stack</p>
+      <span class="tech-tag">Unreal Engine 5</span>
+      <span class="tech-tag">Blueprints</span>
+      <span class="tech-tag">Behavior Trees</span>
+      <span class="tech-tag">AI Perception</span>
+      <span class="tech-tag">NavMesh</span>
+      <span class="tech-tag">Ardour</span>
+      <span class="tech-tag">Audacity</span>
+      <span class="tech-tag">LANDR</span>
+    </div>
+
+    <div class="sidebar-block">
+      <p class="sidebar-block-title">Links</p>
+      <a class="sidebar-link" href="https://fear-wydk.itch.io/mask-survival" target="_blank" rel="noopener">
+        <span class="link-icon">⬇</span> Play on itch.io
+      </a>
+    </div>
+
+    <div class="sidebar-block">
+      <p class="sidebar-block-title">Project Type</p>
+      <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Solo personal project. All design, programming, audio, and publishing by Josh Brooks.</p>
+    </div>
+
+  </aside>
+</div>
+
+<!-- PAGINATION -->
+<div class="cs-pagination">
+  <a class="cs-pag-btn" href="personal.html">
+    ← <div><span>Back to</span><span class="pag-title">Personal Projects</span></div>
+  </a>
+  <a class="cs-pag-btn" href="case-shattered-melodies.html">
+    <div style="text-align:right;"><span>Next Case Study</span><span class="pag-title">Shattered Melodies</span></div> →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-copy">© 2024 Josh Brooks — Game Developer</p>
+  <div class="footer-links">
+    <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
+    <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  function openLightbox(el) {
+    const img = el.querySelector('img');
+    document.getElementById('lightboxImg').src = img.src;
+    document.getElementById('lightboxImg').alt = img.alt;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>
