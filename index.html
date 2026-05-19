@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Josh Brooks — Game Programmer & Designer. UE5, Blueprints, C++."/>
+<title>Josh Brooks — Game Dev Portfolio</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  /* ── HERO ── */
+  .hero {
+    min-height: calc(100vh - 62px);
+    display: flex;
+    align-items: center;
+    padding: 80px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(34,211,238,0.07), transparent),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(132,0,5,0.08), transparent);
+    pointer-events: none;
+  }
+  /* subtle grid texture */
+  .hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(34,211,238,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34,211,238,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 16px;
+    opacity: 0.85;
+  }
+  .hero-name {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .hero-name span {
+    color: var(--cyan);
+  }
+  .hero-role {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red-bright);
+    margin-bottom: 28px;
+    opacity: 0.9;
+  }
+  .hero-bio {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 36px;
+  }
+  .hero-btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* hero stat chips */
+  .hero-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .stat-card:hover {
+    border-color: rgba(34,211,238,0.4);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 16px var(--cyan-glow);
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; top:0; right:0;
+    width:30px; height:30px;
+    background: linear-gradient(225deg, var(--cyan-dim), transparent 60%);
+    opacity: 0.4;
+    border-radius: 0 var(--radius) 0 0;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--white);
+    line-height: 1.3;
+  }
+  .stat-sub {
+    font-size: 11px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.45);
+    margin-top: 4px;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .about-text p {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+  .about-text p:last-child { margin-bottom: 0; }
+
+  .skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .skill-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .skill-name {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  .skill-name span { color: var(--cyan); }
+  .skill-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan-dim), var(--cyan));
+    border-radius: 2px;
+    transform-origin: left;
+    animation: fillBar 1.2s cubic-bezier(0.22,1,0.36,1) both;
+    animation-play-state: paused;
+  }
+  .skill-fill.animate { animation-play-state: running; }
+  @keyframes fillBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* ── FEATURED VIDEO ── */
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  }
+  .video-wrap iframe {
+    position: absolute; inset:0;
+    width:100%; height:100%;
+    border:none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-inner  { grid-template-columns: 1fr; gap:40px; }
+    .hero-stats  { flex-direction: row; flex-wrap: wrap; }
+    .stat-card   { flex:1; min-width:200px; }
+    .about-grid  { grid-template-columns: 1fr; }
+    .hero        { padding: 60px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-logo">
+    <img src="https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/users/c1eed976-c0aa-4ad0-b243-b94461a41cc9/design-previews/214d02a4-6cc4-48d9-95d4-596dc8450f7b/1761703744191-transparentThumbnail.png" alt="Josh Brooks Logo"/>
+    <span class="nav-logo-text">Josh Brooks</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="professional.html">Professional</a></li>
+    <li><a href="personal.html">Personal</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <p class="hero-eyebrow">// game programmer & designer</p>
+      <h1 class="hero-name">Josh<br/><span>Brooks</span></h1>
+      <p class="hero-role">UE5 · Blueprints · C++</p>
+      <p class="hero-bio">
+        I build immersive gameplay systems in Unreal Engine 5 — from faction-aware AI and modular combat frameworks to custom UI and original IP. Currently targeting Square Enix's post-2027 hiring cycle with Yoruba Hearts.
+      </p>
+      <div class="hero-btns">
+        <a class="btn" href="https://2205a5c4-53d7-4538-85b3-964f6ede4443.filesusr.com/ugd/c1eed9_886ade4aed494b0692daa543a011683f.pdf" target="_blank" rel="noopener">
+          ↓ Resume
+        </a>
+        <a class="btn btn-solid" href="professional.html">View Projects</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <p class="stat-label">Primary Engine</p>
+        <p class="stat-value">Unreal Engine 5</p>
+        <p class="stat-sub">Blueprints · GAS · C++ (in progress)</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Current Target</p>
+        <p class="stat-value">Square Enix</p>
+        <p class="stat-sub">Post-2027 hiring cycle · Yoruba Hearts portfolio</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Education</p>
+        <p class="stat-value">M.S. Game Design</p>
+        <p class="stat-sub">Full Sail University · Digital Cinematography B.S.</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Studio Collaboration</p>
+        <p class="stat-value">AyoGamesStudio</p>
+        <p class="stat-sub">Lead Programmer · Little Red Hunter</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED VIDEO -->
+<div class="section" style="padding-top:0;">
+  <p class="section-label">// latest work</p>
+  <h2 class="section-title">Boss Enemy Healthbar</h2>
+  <div class="section-rule"></div>
+  <div class="video-wrap">
+    <iframe src="https://www.youtube.com/embed/sXqVevbXJlM" title="KH-Style Segmented Healthbar Tutorial" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- ABOUT SNAPSHOT -->
+<div class="section" style="background:var(--bg-dark); max-width:100%; padding:80px 40px;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <p class="section-label">// about me</p>
+    <h2 class="section-title">Who I Am</h2>
+    <div class="section-rule"></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Hey! I'm Josh, a Game Programmer and Designer from New Jersey, USA. I've been playing games for as long as I can remember, always curious about how they worked behind the scenes.</p>
+        <p>That curiosity led me to earn a Conservatory Certificate in Fine Arts, a Bachelor's in Digital Cinematography, and later a Master's in Game Design from Full Sail University.</p>
+        <p>During my studies, I interned at Zygobots, where I shipped my first game and served as Lead Intern. Since then I've focused on building immersive gameplay systems, experimenting with mechanics, and refining modular design approaches.</p>
+        <p>What excites me most is figuring out how gameplay systems tick — and then finding ways to make them more efficient, polished, and fun.</p>
+        <div style="margin-top:28px;">
+          <a class="btn" href="about.html">Full Bio & Contact →</a>
+        </div>
+      </div>
+      <div class="skills-grid" id="skillsGrid">
+        <div class="skill-row">
+          <div class="skill-name">Unreal Engine 5 <span>Expert</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">Blueprint Scripting <span>Expert</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">Game Systems Design <span>Advanced</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">C++ / SDL <span>Intermediate</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:55%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">Gameplay Ability System <span>Learning</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:35%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name">Blender / 3D Pipeline <span>Intermediate</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:50%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-copy">© 2024 Josh Brooks — Game Developer</p>
+  <div class="footer-links">
+    <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
+    <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  // Nav hamburger
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // Skill bar animation on scroll
+  const skillsGrid = document.getElementById('skillsGrid');
+  const fills = skillsGrid.querySelectorAll('.skill-fill');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        fills.forEach((f, i) => {
+          setTimeout(() => f.classList.add('animate'), i * 100);
+        });
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  observer.observe(skillsGrid);
+</script>
+</body>
+</html>
