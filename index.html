@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Professional Projects</title>
+<!-- Forces ALL links to open in a new top-level tab, bypassing iFrame sandbox -->
+<base target="_blank"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Space+Mono&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #838383;
+    --surface:    #23272f;
+    --surface2:   #2a2f3a;
+    --cyan:       #22d3ee;
+    --cyan-dim:   #0e7490;
+    --red:        #840005;
+    --red-bright: #E32132;
+    --white:      #ffffff;
+    --muted:      rgba(255,255,255,0.4);
+    --border:     rgba(34,211,238,0.18);
+    --fade-w:     60px;
+    --card-w:     300px;
+    --card-h:     460px;
+    --media-h:    185px;
+    --gap:        20px;
+    --radius:     14px;
+  }
+
+  html, body {
+    background: transparent;
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    overflow: hidden;
+  }
+
+  .scroller-wrap { position: relative; width: 100%; }
+  .scroller-wrap::before,
+  .scroller-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: var(--fade-w);
+    z-index: 10;
+    pointer-events: none;
+    transition: width 0.2s ease;
+  }
+  .scroller-wrap::before { left:0;  background: linear-gradient(to right, var(--bg), transparent); }
+  .scroller-wrap::after  { right:0; background: linear-gradient(to left,  var(--bg), transparent); }
+
+  .track {
+    display: flex;
+    gap: var(--gap);
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 28px var(--fade-w) 32px;
+    scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
+  }
+  .track:active { cursor: grabbing; }
+  .track::-webkit-scrollbar { display: none; }
+
+  .card-scene {
+    flex: 0 0 var(--card-w);
+    height: var(--card-h);
+    perspective: 900px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  .card {
+    width: 100%; height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), box-shadow 0.6s ease, border-color 0.4s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .card.tilting {
+    transition: transform 0.08s linear, box-shadow 0.08s linear, border-color 0.4s ease;
+  }
+  .card:hover { border-color: rgba(34,211,238,0.6); }
+  .card::before {
+    content: '';
+    position: absolute;
+    top:0; right:0;
+    width:40px; height:40px;
+    background: linear-gradient(225deg, var(--cyan-dim), transparent 60%);
+    opacity: 0.5;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 0 var(--radius) 0 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 1; }
+
+  .holo {
+    position: absolute; inset: 0;
+    border-radius: var(--radius);
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    mix-blend-mode: screen;
+  }
+  .holo::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: var(--radius);
+    background: radial-gradient(
+      ellipse 55% 40% at var(--gx,50%) var(--gy,40%),
+      rgba(255,255,255,0.16) 0%,
+      rgba(255,255,255,0.05) 40%,
+      transparent 70%
+    );
+  }
+  .card:hover .holo { opacity: 1; }
+
+  .card-media {
+    position: relative;
+    width: 100%; height: var(--media-h);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .card-media img {
+    width:100%; height:100%;
+    object-fit: cover;
+    filter: brightness(.85) saturate(.85);
+    transition: filter 0.4s ease;
+  }
+  .card:hover .card-media img { filter: brightness(1) saturate(1); }
+  .card-media::after {
+    content:'';
+    position:absolute; bottom:0; left:0; right:0;
+    height:55px;
+    background: linear-gradient(transparent, var(--surface));
+    pointer-events:none;
+  }
+  .card-media svg { width:100%; height:100%; }
+
+  .badge {
+    position: absolute; top:10px; left:10px; z-index: 3;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 20px;
+    backdrop-filter: blur(8px);
+    background: rgba(28,31,38,0.85);
+    border: 1px solid var(--border);
+    color: var(--cyan);
+  }
+  .badge.personal { color: var(--cyan);      border-color: rgba(34,211,238,.4); }
+  .badge.concept  { color: #a78bfa;           border-color: rgba(167,139,250,.3); }
+  .badge.tutorial { color: var(--red-bright); border-color: rgba(227,33,50,.3); }
+  .badge.pro      { color: var(--white);      border-color: rgba(255,255,255,.2); }
+
+  .card-body { flex:1; display:flex; flex-direction:column; padding:13px 15px 15px; gap:7px; }
+
+  .tags { display:flex; flex-wrap:wrap; gap:5px; }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--cyan); background: rgba(34,211,238,.06);
+    text-decoration: none; display: inline-block;
+    transition: background .2s, border-color .2s;
+    cursor: default;
+  }
+  .tag[href] { cursor: pointer; }
+  .tag:hover { background: rgba(34,211,238,.16); border-color: rgba(34,211,238,.6); }
+  .tag.r { color:var(--red-bright); border-color:rgba(227,33,50,.4); background:rgba(132,0,5,.15); }
+  .tag.r:hover { background:rgba(132,0,5,.28); border-color:rgba(227,33,50,.7); }
+  .tag.p { color:#a78bfa; border-color:rgba(167,139,250,.3); background:rgba(167,139,250,.08); }
+  .tag.p:hover { background:rgba(167,139,250,.18); border-color:rgba(167,139,250,.6); }
+  .tag.g { color:#4ade80; border-color:rgba(74,222,128,.3); background:rgba(74,222,128,.08); }
+  .tag.g:hover { background:rgba(74,222,128,.18); }
+
+  .card-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 600;
+    font-size: 13px; line-height: 1.4; color: var(--white);
+    letter-spacing: 0.3px; margin-top: 2px;
+  }
+  .card-desc {
+    font-family: 'Montserrat', sans-serif; font-weight: 300;
+    font-size: 11.5px; color: rgba(255,255,255,.55); line-height: 1.6; flex:1;
+  }
+  .card-footer {
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top: 10px; border-top: 1px solid rgba(34,211,238,.12); margin-top: 6px;
+  }
+  .card-year {
+    font-family: 'Space Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 2px;
+  }
+  .card-cta {
+    font-family: 'Montserrat', sans-serif; font-weight: 600;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--red-bright); text-decoration: none;
+    display:flex; align-items:center; gap: 5px; opacity: .7;
+    transition: opacity .2s, gap .2s, color .2s;
+  }
+  .card-cta:hover { color: var(--cyan); opacity:1; gap:9px; }
+
+  .nav { display:flex; justify-content:center; align-items:center; gap:14px; padding:4px 0 12px; }
+  .nav-btn {
+    width:38px; height:38px; border-radius:50%;
+    border: 1px solid var(--border); background: var(--surface); color: var(--cyan);
+    font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition: background .2s, transform .15s, border-color .2s;
+  }
+  .nav-btn:hover { background:rgba(34,211,238,.1); border-color:rgba(34,211,238,.5); transform:scale(1.08); }
+  .nav-btn:active { transform:scale(.94); }
+  .dots { display:flex; gap:7px; align-items:center; }
+  .dot {
+    width:5px; height:5px; border-radius:50%; background: var(--muted);
+    cursor:pointer; transition: background .3s, transform .3s; border:none; padding:0;
+  }
+  .dot.active { background:var(--cyan); transform:scale(1.5); }
+
+  @media (pointer: coarse) and (max-width: 600px) {
+    :root { --card-w: calc(100vw - 32px); --card-h: auto; --media-h: 200px; }
+    html, body { overflow: visible; }
+    .scroller-wrap::before, .scroller-wrap::after { display: none; }
+    .track { flex-direction:column; overflow-x:visible; scroll-snap-type:none; padding:16px; cursor:default; }
+    .card-scene { flex:none; width:100%; height:auto; }
+    .card { height:auto; transform:none !important; }
+    .holo { display:none; }
+    .nav  { display:none; }
+  }
+</style>
+</head>
+<body>
+<script>
+/* ================================================================
+   ✏️  EDIT YOUR PROJECTS HERE
+   ================================================================ */
+const PROJECTS = [
+
+  {
+    title:      "Little Red Hunter",
+    year:       "2025 — TBA",
+    badge:      "Professional",
+    badgeClass: "pro",
+    desc:       "Modular turret system, health & inventory components, enemy AI for Wolf & Grey. Leading Blueprint architecture with AyoGamesStudio across a 22 GB shared codebase.",
+    ctaLabel:   "View Case Study",
+    ctaLink:    "https://brooksjoshua43.wixsite.com/gamedevportfolio/s-projects-side-by-side",
+    tags: [
+      { label:"UE5",             color:"" },
+      { label:"Lead Programmer", color:"" },
+      { label:"Roguelite",       color:"" },
+      { label:"In Dev",          color:"p" },
+    ],
+    media:{ type:"image", src:"https://static.wixstatic.com/media/c1eed9_048575622e5540bda8d46e5e1c1c91e8~mv2.png", alt:"Little Red Hunter" }
+  },
+
+  {
+    title:      "Shattered Melodies",
+    year:       "2023 — 2024",
+    badge:      "Professional",
+    badgeClass: "pro",
+    desc:       "RPG following Attrell on a quest to save his sister. Built enemy AI, vending machine mechanics, crystal puzzles, and a full item shop system during my Full Sail internship.",
+    ctaLabel:   "View Case Study",
+    ctaLink:    "https://brooksjoshua43.wixsite.com/gamedevportfolio/portfoliotemplate/shattered-melodies",
+    tags: [
+      { label:"UE5",        color:"" },
+      { label:"Blueprints", color:"" },
+      { label:"RPG",        color:"" },
+      { label:"Steam",      color:"r", link:"https://store.steampowered.com/app/2989200/Shattered_Melodies/" },
+    ],
+    media:{ type:"image", src:"https://static.wixstatic.com/media/c1eed9_1c5d2ff0e36646c98c0fe90aca63746d~mv2.png", alt:"Shattered Melodies" }
+  },
+
+  /* ── ADD NEW PROFESSIONAL PROJECT HERE ── */
+
+];
+/* ================================================================
+   ✏️  END OF EDITABLE SECTION
+   ================================================================ */
+
+function initFadeEdge() {
+  const root = document.documentElement;
+  const wrap = document.querySelector('.scroller-wrap');
+  function update() {
+    const fadeW = Math.min(100, Math.max(40, Math.round(wrap.offsetWidth * 0.18)));
+    root.style.setProperty('--fade-w', fadeW + 'px');
+    document.querySelector('.track').style.paddingLeft  = fadeW + 'px';
+    document.querySelector('.track').style.paddingRight = fadeW + 'px';
+  }
+  update();
+  window.ResizeObserver ? new ResizeObserver(update).observe(wrap) : window.addEventListener('resize', update);
+}
+
+function buildCard(p) {
+  const scene = document.createElement('div');
+  scene.className = 'card-scene';
+  const card = document.createElement('article');
+  card.className = 'card';
+
+  let mediaHTML = '';
+  if (p.media.type === 'image') {
+    mediaHTML = `<div class="card-media"><span class="badge ${p.badgeClass}">${p.badge}</span><img src="${p.media.src}" alt="${p.media.alt}" loading="lazy"/></div>`;
+  } else if (p.media.type === 'svg') {
+    mediaHTML = `<div class="card-media"><span class="badge ${p.badgeClass}">${p.badge}</span>${p.media.code}</div>`;
+  } else {
+    mediaHTML = `<div class="card-media" style="background:linear-gradient(135deg,#0d1117,#1a1f2e 40%,#111318);"><span class="badge ${p.badgeClass}">${p.badge}</span>${p.media.html}</div>`;
+  }
+
+  const tagsHTML = p.tags.map(t => t.link
+    ? `<a class="tag ${t.color}" href="${t.link}">${t.label} ↗</a>`
+    : `<span class="tag ${t.color}">${t.label}</span>`
+  ).join('');
+
+  card.innerHTML = `
+    ${mediaHTML}
+    <div class="holo"></div>
+    <div class="card-body">
+      <div class="tags">${tagsHTML}</div>
+      <h3 class="card-title">${p.title}</h3>
+      <p class="card-desc">${p.desc}</p>
+      <div class="card-footer">
+        <span class="card-year">${p.year}</span>
+        <a class="card-cta" href="${p.ctaLink}">${p.ctaLabel} →</a>
+      </div>
+    </div>`;
+
+  scene.appendChild(card);
+  return scene;
+}
+
+function initTilt(card) {
+  if (window.matchMedia('(pointer: coarse) and (max-width:600px)').matches) return;
+  const MAX = 8, ZLIFT = 28;
+  const holo = card.querySelector('.holo');
+  let raf, targetRX=0, targetRY=0, currentRX=0, currentRY=0, active=false;
+  const lerp = (a,b,t) => a+(b-a)*t;
+
+  function tick() {
+    currentRX = lerp(currentRX, targetRX, 0.12);
+    currentRY = lerp(currentRY, targetRY, 0.12);
+    card.style.transform = `rotateX(${currentRX}deg) rotateY(${currentRY}deg) translateZ(${active?ZLIFT:0}px)`;
+    card.style.boxShadow = active
+      ? `0 ${18+Math.abs(currentRX)}px ${50+Math.abs(currentRX)*2}px rgba(0,0,0,.75),0 0 30px rgba(34,211,238,.12),inset 0 1px 0 rgba(34,211,238,.18)`
+      : '';
+    raf = requestAnimationFrame(tick);
+  }
+
+  card.addEventListener('mouseenter', () => { active=true; card.classList.add('tilting'); raf=requestAnimationFrame(tick); });
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX-r.left)/r.width, y = (e.clientY-r.top)/r.height;
+    targetRX = -(y-0.5)*MAX*2; targetRY = (x-0.5)*MAX*2;
+    const angle = Math.atan2(y-0.5, x-0.5)*(180/Math.PI);
+    holo.style.background = `conic-gradient(from ${angle}deg at ${x*100}% ${y*100}%,rgba(255,0,80,.20),rgba(255,165,0,.18),rgba(255,255,0,.15),rgba(0,255,140,.18),rgba(0,180,255,.20),rgba(160,0,255,.18),rgba(255,0,180,.18),rgba(255,0,80,.20))`;
+    holo.style.setProperty('--gx', x*100+'%');
+    holo.style.setProperty('--gy', y*100+'%');
+  });
+  card.addEventListener('mouseleave', () => {
+    active=false; targetRX=0; targetRY=0;
+    setTimeout(() => { cancelAnimationFrame(raf); card.style.transform=''; card.style.boxShadow=''; card.classList.remove('tilting'); currentRX=0; currentRY=0; }, 600);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const track=document.getElementById('track'), dotsEl=document.getElementById('dots');
+  const mobile=window.matchMedia('(pointer: coarse) and (max-width:600px)').matches;
+
+  PROJECTS.forEach((p,i) => {
+    const scene=buildCard(p); track.appendChild(scene); initTilt(scene.querySelector('.card'));
+    if (!mobile) {
+      const dot=document.createElement('button');
+      dot.className='dot'+(i===0?' active':'');
+      dot.setAttribute('aria-label',`Project ${i+1}`);
+      dot.addEventListener('click',()=>scrollTo(i));
+      dotsEl.appendChild(dot);
+    }
+  });
+
+  initFadeEdge();
+  if (mobile) return;
+
+  const GAP=20, cardW=()=>track.querySelector('.card-scene').offsetWidth+GAP;
+  function scrollTo(i){track.scrollTo({left:i*cardW(),behavior:'smooth'});}
+  function updateDots(){const idx=Math.round(track.scrollLeft/cardW());dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));}
+  document.getElementById('prev').addEventListener('click',()=>track.scrollBy({left:-cardW(),behavior:'smooth'}));
+  document.getElementById('next').addEventListener('click',()=>track.scrollBy({left:cardW(),behavior:'smooth'}));
+  track.addEventListener('scroll',updateDots,{passive:true});
+
+  let down=false,startX,scrollLeft;
+  track.addEventListener('mousedown',e=>{down=true;startX=e.pageX-track.offsetLeft;scrollLeft=track.scrollLeft;});
+  document.addEventListener('mouseup',()=>down=false);
+  document.addEventListener('mousemove',e=>{if(!down)return;e.preventDefault();track.scrollLeft=scrollLeft-(e.pageX-track.offsetLeft-startX);});
+});
+</script>
+
+<div class="scroller-wrap"><div class="track" id="track"></div></div>
+<div class="nav">
+  <button class="nav-btn" id="prev" aria-label="Previous">&#8592;</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="next" aria-label="Next">&#8594;</button>
+</div>
+</body>
+</html>
