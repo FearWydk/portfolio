@@ -61,7 +61,7 @@ img { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 62px;
+  height: 72px;
 }
 
 .nav-logo {
@@ -70,8 +70,11 @@ img { display: block; max-width: 100%; }
   gap: 12px;
 }
 .nav-logo img {
-  height: 36px;
+  height: 48px;
   width: auto;
+  object-fit: contain;
+  padding: 6px 0;
+}
 }
 .nav-logo-text {
   font-family: var(--font-mono);
