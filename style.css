@@ -125,6 +125,8 @@ img { display: block; max-width: 100%; }
   border-radius: 2px;
   transition: all 0.3s;
 }
+.nav-hamburger span { background: #E32132; }
+.nav-links a:hover, .nav-links a.active { color: #E32132; border-bottom-color: #E32132; }
 
 /* ── MOBILE NAV ── */
 @media (max-width: 768px) {
