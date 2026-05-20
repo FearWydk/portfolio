@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shattered Melodies — Case Study | Josh Brooks</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  .nav-hamburger span { background: #E32132; }
+  .nav-links a:hover, .nav-links a.active { color: #E32132; border-bottom-color: #E32132; }
+
+  .cs-hero { position:relative; min-height:460px; display:flex; align-items:flex-end; overflow:hidden; }
+  .cs-hero-bg { position:absolute; inset:0; background-size:cover; background-position:center; filter:brightness(0.38) saturate(0.85); transform:scale(1.04); transition:transform 8s ease; }
+  .cs-hero:hover .cs-hero-bg { transform:scale(1.0); }
+  .cs-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 0%,rgba(35,39,47,0.65) 60%,var(--bg-dark) 100%); }
+  .cs-hero-content { position:relative; z-index:2; padding:48px 40px; width:100%; max-width:1200px; margin:0 auto; }
+
+  .cs-back { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; margin-bottom:24px; transition:color 0.2s; }
+  .cs-back:hover { color:var(--cyan); }
+  .cs-badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .cs-chip { font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:4px 10px; border-radius:20px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.08); }
+  .cs-chip.red    { color:#E32132; border-color:rgba(227,33,50,0.4);    background:rgba(132,0,5,0.15); }
+  .cs-chip.purple { color:#a78bfa; border-color:rgba(167,139,250,0.3);  background:rgba(167,139,250,0.08); }
+  .cs-chip.green  { color:#4ade80; border-color:rgba(74,222,128,0.3);   background:rgba(74,222,128,0.08); }
+  .cs-title { font-family:var(--font-head); font-weight:700; font-size:clamp(32px,5vw,58px); color:var(--white); line-height:1.05; margin-bottom:12px; }
+  .cs-subtitle { font-size:15px; font-weight:300; color:rgba(255,255,255,0.6); max-width:600px; line-height:1.6; }
+
+  .cs-meta { background:var(--surface); border-bottom:1px solid var(--border); }
+  .cs-meta-inner { max-width:1200px; margin:0 auto; padding:0 40px; display:flex; gap:48px; flex-wrap:wrap; }
+  .cs-meta-item { padding:18px 0; flex-shrink:0; }
+  .cs-meta-label { font-family:var(--font-mono); font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+  .cs-meta-value { font-family:var(--font-mono); font-size:12px; color:var(--white); }
+  .cs-meta-value a { color:var(--cyan); text-decoration:none; transition:opacity 0.2s; }
+  .cs-meta-value a:hover { opacity:0.7; }
+
+  .cs-body { max-width:1200px; margin:0 auto; padding:64px 40px; display:grid; grid-template-columns:1fr 300px; gap:64px; align-items:start; }
+
+  .cs-section { margin-bottom:64px; }
+  .cs-section:last-child { margin-bottom:0; }
+  .cs-section-label { font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#E32132; margin-bottom:10px; opacity:0.9; }
+  .cs-section-title { font-family:var(--font-head); font-weight:700; font-size:22px; color:var(--white); margin-bottom:20px; line-height:1.2; }
+  .cs-section-rule { width:32px; height:2px; background:linear-gradient(90deg,#E32132,transparent); margin-bottom:24px; }
+  .cs-text { font-size:14px; font-weight:300; color:rgba(255,255,255,0.65); line-height:1.8; margin-bottom:16px; }
+  .cs-text:last-child { margin-bottom:0; }
+
+  /* IMPL CARDS */
+  .cs-impl-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:8px; }
+  .cs-impl-list li { display:flex; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--cyan); border-radius:var(--radius-sm); overflow:hidden; transition:border-color 0.2s,box-shadow 0.2s; }
+  .cs-impl-list li:hover { border-left-color:#E32132; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
+  .impl-main { padding:16px 18px; flex:1; min-width:0; }
+  .impl-icon { font-family:var(--font-mono); font-size:10px; color:var(--cyan); letter-spacing:1px; margin-bottom:6px; display:block; }
+  .impl-text { font-size:13px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.6; }
+  .impl-text strong { font-weight:600; color:var(--white); display:block; margin-bottom:4px; }
+
+  .impl-media-video { width:140px; flex-shrink:0; border-left:1px solid var(--border); background:var(--surface2); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; position:relative; transition:background 0.2s; gap:6px; min-height:100px; }
+  .impl-media-video:hover { background:rgba(34,211,238,0.08); }
+  .impl-media-video .play-icon { font-size:26px; color:var(--cyan); opacity:0.8; transition:opacity 0.2s,transform 0.2s; }
+  .impl-media-video:hover .play-icon { opacity:1; transform:scale(1.1); }
+  .impl-media-video .vid-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); text-align:center; padding:0 8px; }
+
+  .impl-media-placeholder { width:140px; flex-shrink:0; border-left:1px solid var(--border); background:var(--surface2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; min-height:100px; }
+  .impl-media-placeholder span { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); text-align:center; padding:0 8px; }
+
+  /* IMPACT */
+  .cs-impact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:8px; }
+  .impact-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px 12px; text-align:center; transition:border-color 0.3s,box-shadow 0.3s; }
+  .impact-card:hover { border-color:rgba(34,211,238,0.4); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  .impact-num { font-family:var(--font-head); font-weight:700; font-size:26px; color:var(--cyan); line-height:1; margin-bottom:6px; }
+  .impact-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); line-height:1.4; }
+
+  /* TAKEAWAY */
+  .cs-takeaway { background:var(--surface); border:1px solid var(--border); border-left:4px solid #E32132; border-radius:var(--radius); padding:28px 28px 28px 24px; margin-top:8px; }
+  .cs-takeaway p { font-size:14px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.8; margin-bottom:14px; }
+  .cs-takeaway p:last-child { margin-bottom:0; }
+
+  /* GALLERY */
+  .gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .gallery-video { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); position:relative; padding-top:56.25%; background:var(--surface2); }
+  .gallery-video.wide { grid-column:span 2; }
+  .gallery-video iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+  .gallery-section-label { grid-column:span 2; font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); padding-top:8px; border-top:1px solid var(--border); margin-top:4px; }
+  .gallery-item { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); background:var(--surface2); position:relative; cursor:pointer; transition:border-color 0.2s,transform 0.2s; }
+  .gallery-item:hover { border-color:rgba(34,211,238,0.4); transform:translateY(-2px); }
+  .gallery-item.wide { grid-column:span 2; }
+  .gallery-item img { width:100%; display:block; object-fit:cover; min-height:120px; max-height:280px; }
+  .gallery-caption { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.72); padding:8px 12px; font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.7); opacity:0; transition:opacity 0.2s; }
+  .gallery-item:hover .gallery-caption { opacity:1; }
+
+  /* LIGHTBOX */
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.94); z-index:999; align-items:center; justify-content:center; padding:24px; }
+  .lightbox.open { display:flex; }
+  .lightbox img { max-width:90vw; max-height:85vh; border-radius:var(--radius-sm); object-fit:contain; }
+  .lightbox-close { position:absolute; top:20px; right:24px; font-family:var(--font-mono); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); cursor:pointer; background:none; border:none; transition:color 0.2s; }
+  .lightbox-close:hover { color:var(--white); }
+
+  /* SIDEBAR */
+  .cs-sidebar { position:sticky; top:80px; display:flex; flex-direction:column; gap:20px; }
+  .sidebar-block { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+  .sidebar-block-title { font-family:var(--font-mono); font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--cyan); opacity:0.7; margin-bottom:14px; }
+  .tech-tag { display:inline-block; font-family:var(--font-mono); font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:4px 8px; border-radius:4px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.06); margin:0 4px 6px 0; }
+  .sidebar-link { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border); color:var(--white); text-decoration:none; font-size:12px; font-weight:600; letter-spacing:1px; transition:background 0.2s,border-color 0.2s; margin-bottom:8px; }
+  .sidebar-link:last-child { margin-bottom:0; }
+  .sidebar-link:hover { background:rgba(34,211,238,0.08); border-color:rgba(34,211,238,0.4); }
+  .sidebar-link .link-icon { font-size:14px; color:var(--cyan); }
+
+  /* PAGINATION */
+  .cs-pagination { max-width:1200px; margin:0 auto; padding:32px 40px 64px; display:flex; justify-content:space-between; align-items:center; gap:16px; border-top:1px solid var(--border); }
+  .cs-pag-btn { display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+  .cs-pag-btn:hover { color:var(--cyan); }
+  .cs-pag-btn .pag-title { font-family:var(--font-head); font-size:13px; font-weight:600; color:var(--white); letter-spacing:0; text-transform:none; display:block; margin-top:3px; }
+
+  @media (max-width:900px) {
+    .cs-body { grid-template-columns:1fr; gap:40px; padding:40px 20px; }
+    .cs-sidebar { position:static; }
+    .cs-hero-content { padding:32px 20px; }
+    .cs-meta-inner { padding:0 20px; gap:24px; }
+    .cs-impact-grid { grid-template-columns:repeat(2,1fr); }
+    .cs-pagination { padding:24px 20px 48px; }
+    .gallery-grid { grid-template-columns:1fr; }
+    .gallery-item.wide,.gallery-video.wide,.gallery-section-label { grid-column:span 1; }
+    .impl-media-video,.impl-media-placeholder { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-logo">
+    <img src="https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/users/c1eed976-c0aa-4ad0-b243-b94461a41cc9/design-previews/214d02a4-6cc4-48d9-95d4-596dc8450f7b/1761703744191-transparentThumbnail.png" alt="Josh Brooks Logo"/>
+    <span class="nav-logo-text">Josh Brooks</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="professional.html" class="active">Professional</a></li>
+    <li><a href="personal.html">Personal</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="cs-hero">
+  <div class="cs-hero-bg" style="background-image:url('media/shattered-melodies/hero.png');"></div>
+  <div class="cs-hero-content">
+    <a class="cs-back" href="professional.html">← Back to Professional Projects</a>
+    <div class="cs-badge-row">
+      <span class="cs-chip">Professional</span>
+      <span class="cs-chip">UE5</span>
+      <span class="cs-chip">Blueprints</span>
+      <span class="cs-chip purple">Team — 20+ People</span>
+      <span class="cs-chip red">Shipped</span>
+    </div>
+    <h1 class="cs-title">Shattered Melodies</h1>
+    <p class="cs-subtitle">The first game from Ayo Games Studios — an action RPG where music and combat intertwine. Completed as a Master's capstone project with a team of 20+ developers and now live on Steam.</p>
+  </div>
+</div>
+
+<!-- META BAR -->
+<div class="cs-meta">
+  <div class="cs-meta-inner">
+    <div class="cs-meta-item"><p class="cs-meta-label">Timeline</p><p class="cs-meta-value">2023 — 2024</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Role</p><p class="cs-meta-value">Gameplay Programmer (Intern)</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Team Size</p><p class="cs-meta-value">20+ People</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Engine</p><p class="cs-meta-value">Unreal Engine 5</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Platform</p><p class="cs-meta-value">PC (Windows)</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Play It</p><p class="cs-meta-value"><a href="https://store.steampowered.com/app/2989200/Shattered_Melodies/" target="_blank" rel="noopener">Steam ↗</a></p></div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="cs-body">
+<main>
+
+  <!-- PURPOSE -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 01</p>
+    <h2 class="cs-section-title">Purpose</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Shattered Melodies is the first shipped title from Ayo Games Studios, completed during my Master's program at Full Sail University. The project brought together over 20 developers across programming, design, art, and audio — all working toward a single shippable game on Steam.</p>
+    <p class="cs-text">As a gameplay programmer, my focus was building the systems that made the world feel interactive and alive — puzzles that rewarded curiosity, AI that reacted believably, UI that added immersion, and economy systems that gave players meaningful choices. Each system had to be modular enough to be handed off or extended by teammates on a live production schedule.</p>
+    <p class="cs-text">The project was my first experience shipping a game as part of a real multi-disciplinary team, managing code in a shared environment, and building systems to a production standard rather than a prototype standard.</p>
+  </div>
+
+  <!-- IMPLEMENTATION -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 02</p>
+    <h2 class="cs-section-title">Implementation</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Each system below was designed, built, and iterated on as part of the production pipeline. Click any play button to watch the system in action.</p>
+    <ul class="cs-impl-list">
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">01 — Crystal Puzzle</span>
+          <div class="impl-text">
+            <strong>Key-Based Color Puzzle System</strong>
+            Interacting with crystals cycles them through four colors. A loop checks each crystal's alignment against required keys — correct alignment triggers a ballad and opens the door, while incorrect input flashes the crystals white three times and plays a siren before resetting. Provides a puzzle challenge that doubles as a musical narrative element.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('n6H-oOlsTNQ')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">02 — Quest & Nav System</span>
+          <div class="impl-text">
+            <strong>Spline Pathfinding with Player Toggle</strong>
+            Built using a spline that follows line traces for pathfinding, avoiding unwalkable areas. A toggle system lets players switch between a visual spline with VFX, a simple HUD marker, or navigation off entirely. Quests tie to collision events, enabling cutscene triggers and objective completion logic.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('cKkFWBzudRc')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">03 — Shopkeeper & Inventory</span>
+          <div class="impl-text">
+            <strong>Array-Based Economy System</strong>
+            Built using arrays to handle item storage, transfers, and removals. The Shopkeeper Actor prompts a UI shop interface with modular item pools defined per level — ranging from low- to high-potency items. Items sell at reduced value, and the system includes a working in-game currency with full buy/sell logic.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('2ejaolVg7GI')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">04 — 3D Mesh in Pause Menu</span>
+          <div class="impl-text">
+            <strong>Live Character Preview via Scene Capture</strong>
+            Spawned a separate player actor beneath the map when the pause menu opens, rendered via a UI scene capture component into a render target. The actor remains tickable during pause for smooth rotation, and is destroyed once the game resumes — similar in presentation to Kingdom Hearts' pause menu character display.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('U9ENFx4scCM')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">05 — Muse Trail Color Swap</span>
+          <div class="impl-text">
+            <strong>Dynamic Material Parameter via Struct</strong>
+            Used a dynamic material parameter stored in the Muse struct. When the player switches companions, the system calls the struct and updates the material parameter to reflect the correct floating note color — all handled through a single reusable material, reducing asset overhead while delivering clear visual feedback.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('S6TXMGiMOC0')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">06 — Vending Machine</span>
+          <div class="impl-text">
+            <strong>Interactive Object with Health & VFX</strong>
+            Built from a static mesh with connected lights, collision, smoke VFX, zap SFX, and a health component. When struck by the player's weapon, the machine takes damage, rotates via a timeline for hit reaction, and dispenses items until its health is depleted — at which point it shuts down with flashing lights, smoke, and zap effects.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('vsglVEpb6ZQ')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">07 — Flood Lights (Malum Rap Boss)</span>
+          <div class="impl-text">
+            <strong>Concert-Style Randomized Light Arrays</strong>
+            Built using point lights paired with cone meshes, linked through arrays to synchronize their colors. Array indexes are randomized to create dynamic light shifts, while a timeline rotates the lights by 45 degrees to simulate theater-style motion — elevating the boss fight with performance-inspired atmosphere.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('KDtTBN1bKIE')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">08 — Enemy AI — Classical Knights</span>
+          <div class="impl-text">
+            <strong>Behavior Trees with EQS Strafing</strong>
+            Built with Behavior Trees using line traces for target detection and capsule collisions for weapon and body hit registration. Integrated EQS for strafing behavior and added sheath/unsheath mechanics by spawning and destroying Weapon Actors with synced animations, creating tactical, cinematic enemies.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('hZkQuB7UZQI')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">09 — Use Item System</span>
+          <div class="impl-text">
+            <strong>In-World Item Consumption</strong>
+            Handles item use directly from the inventory — applying stat effects, triggering animations, and removing the consumed item from the array. Designed to be modular so any item type can define its own use behavior without modifying the core system.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('5aGEuXcaQeg')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">10 — Camera Clipping Debug</span>
+          <div class="impl-text">
+            <strong>Runtime Camera Collision Fix</strong>
+            Diagnosed and resolved a camera clipping issue where the spring arm would pass through geometry in tight spaces. Adjusted collision channel responses and spring arm settings to prevent clipping while maintaining smooth camera behavior during combat and exploration.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('VYwFPqDZoDU')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">11 — Opening Cutscene</span>
+          <div class="impl-text">
+            <strong>Sequencer-Driven Intro Cinematic</strong>
+            Built using UE5's Sequencer to choreograph the opening cinematic — camera movement, character animations, and timed audio events. Triggered on game start with proper input lock and handoff back to gameplay on completion.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('e4tgXwekUX4')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">12 — First Enemy AI Attempt</span>
+          <div class="impl-text">
+            <strong>Prototype AI — Iteration Before Classical Knights</strong>
+            The first pass at enemy AI before the Classical Knights system was built. Documents the iteration process — initial behavior logic, early detection issues, and what informed the final Behavior Tree architecture used in production.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('URtq9ewdglE')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- IMPACT -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 03</p>
+    <h2 class="cs-section-title">Impact</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Shattered Melodies shipped on Steam as a complete, playable title — the result of coordinated production across a 20+ person team. My contributions spanned gameplay systems, AI, UI, economy, and environmental systems.</p>
+    <div class="cs-impact-grid">
+      <div class="impact-card"><p class="impact-num">20+</p><p class="impact-label">Team Members</p></div>
+      <div class="impact-card"><p class="impact-num">12</p><p class="impact-label">Systems Built</p></div>
+      <div class="impact-card"><p class="impact-num">Steam</p><p class="impact-label">Publicly Shipped</p></div>
+      <div class="impact-card"><p class="impact-num">M.S.</p><p class="impact-label">Master's Capstone</p></div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 04</p>
+    <h2 class="cs-section-title">Media Gallery</h2>
+    <div class="cs-section-rule"></div>
+    <div class="gallery-grid">
+
+      <p class="gallery-section-label">Gameplay Footage</p>
+
+      <div class="gallery-video wide">
+        <iframe src="https://www.youtube.com/embed/SNuQIk3ANIQ" title="Shattered Melodies — Gameplay v1.16 First Run" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video wide">
+        <iframe src="https://www.youtube.com/embed/NrJAIWrhcTU" title="Shattered Melodies — Gameplay Second Run" allowfullscreen></iframe>
+      </div>
+
+      <p class="gallery-section-label">System Clips</p>
+
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/n6H-oOlsTNQ" title="Crystal Puzzle" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/cKkFWBzudRc" title="Quest & Nav System" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/2ejaolVg7GI" title="Shopkeeper & Inventory" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/U9ENFx4scCM" title="3D Mesh Pause Menu" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/S6TXMGiMOC0" title="Muse Trail Color Swap" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/vsglVEpb6ZQ" title="Vending Machine" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/KDtTBN1bKIE" title="Flood Lights" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/hZkQuB7UZQI" title="Enemy AI — Classical Knights" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/5aGEuXcaQeg" title="Use Item System" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/VYwFPqDZoDU" title="Camera Clipping Debug" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/e4tgXwekUX4" title="Opening Cutscene" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/URtq9ewdglE" title="First Enemy AI Attempt" allowfullscreen></iframe>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 05</p>
+    <h2 class="cs-section-title">Takeaway</h2>
+    <div class="cs-section-rule"></div>
+    <div class="cs-takeaway">
+      <p>Shattered Melodies was my first experience shipping a game as part of a real multi-disciplinary production team. Working alongside 20+ people across programming, design, art, and audio taught me something that solo projects can't — how to write code that someone else can read, extend, and depend on.</p>
+      <p>Every system I built had to integrate cleanly with work I didn't control. The shopkeeper needed to respect the inventory system built by another programmer. The quest system had to fire events that the cutscene team was waiting on. That constraint pushed me to think about interfaces and modularity in ways that prototype work never demands.</p>
+      <p>The iteration visible in the AI work — from the first prototype attempt to the final Classical Knights system — reflects how production actually works. The first pass wasn't wrong, it was information. The final system was better because of what we learned from the prototype.</p>
+      <p>Shipping on Steam as a capstone project is something I'm genuinely proud of. It's not a demo or a vertical slice — it's a game that players can download and play today. That standard shapes how I approach every project since.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- SIDEBAR -->
+<aside class="cs-sidebar">
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Tech Stack</p>
+    <span class="tech-tag">Unreal Engine 5</span>
+    <span class="tech-tag">Blueprints</span>
+    <span class="tech-tag">Behavior Trees</span>
+    <span class="tech-tag">EQS</span>
+    <span class="tech-tag">Sequencer</span>
+    <span class="tech-tag">Scene Capture</span>
+    <span class="tech-tag">Dynamic Materials</span>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Play The Game</p>
+    <a class="sidebar-link" href="https://store.steampowered.com/app/2989200/Shattered_Melodies/" target="_blank" rel="noopener">
+      <span class="link-icon">▶</span> Play on Steam
+    </a>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Studio</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Ayo Games Studios. Completed as Master's capstone at Full Sail University alongside 20+ developers.</p>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">My Disciplines</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Gameplay Programming · AI · UI Systems · Economy · VFX Integration · Cinematics</p>
+  </div>
+</aside>
+</div>
+
+<!-- PAGINATION -->
+<div class="cs-pagination">
+  <a class="cs-pag-btn" href="professional.html">
+    ← <div><span>Back to</span><span class="pag-title">Professional Projects</span></div>
+  </a>
+  <a class="cs-pag-btn" href="case-little-red-hunter.html">
+    <div style="text-align:right;"><span>Next Case Study</span><span class="pag-title">Little Red Hunter</span></div> →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-copy">© 2024 Josh Brooks — Game Developer</p>
+  <div class="footer-links">
+    <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
+    <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<!-- VIDEO MODAL -->
+<div class="lightbox" id="videoModal" onclick="closeVideoModal()">
+  <button class="lightbox-close" onclick="closeVideoModal()">✕ Close</button>
+  <div style="width:min(900px,90vw);aspect-ratio:16/9;border-radius:var(--radius-sm);overflow:hidden;" onclick="event.stopPropagation()">
+    <iframe id="videoFrame" src="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  function openVideoModal(videoId) {
+    document.getElementById('videoFrame').src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+    document.getElementById('videoModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideoModal() {
+    document.getElementById('videoFrame').src = '';
+    document.getElementById('videoModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeVideoModal();
+  });
+</script>
+</body>
+</html>
