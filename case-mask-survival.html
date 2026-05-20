@@ -182,7 +182,7 @@
           <span class="impl-icon">01 — AI Architecture</span>
           <div class="impl-text">
             <strong>Faction-Aware Behavior Trees</strong>
-            Four enemy factions with Passive, Investigating, and Chasing states using Blackboard-based conditions with self-abort for clean priority-driven transitions. When one enemy detects the player, nearby faction members escalate without scripted triggers.
+            Four enemy factions with Passive, Investigating, and Chasing states. Blackboard-based conditions with self-abort handle clean priority-driven transitions. The Behavior Tree drives AI state only — patrol movement is handled separately by incrementing spline points on arrival, not through the BT service.
           </div>
         </div>
         <div class="impl-media" onclick="openLightbox('media/mask-survival/Enemy Behavior Tree.png','Enemy Behavior Tree — three-state AI architecture')">
@@ -241,8 +241,8 @@
             Patrol routes use spline components. A BTService reads the current Blackboard patrol index on Tick, gets world position via GetLocationAtSplinePoint, projects it to navigation, and sets the patrol target vector. IncrementPatrolRoute handles bidirectional travel — direction 1 moves forward, -1 reverses — flipping at either spline end.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/BTS Service That ran on Tick.png','BTService patrol tick Blueprint')">
-          <img src="media/mask-survival/BTS Service That ran on Tick.png" alt="BTService patrol"/>
+        <div class="impl-media" onclick="openLightbox('media/mask-survival/Increment Patrol Route.png','IncrementPatrolRoute — spline point arrival system')">
+          <img src="media/mask-survival/Increment Patrol Route.png" alt="IncrementPatrolRoute"/>
           <span class="impl-media-label">View Blueprint</span>
         </div>
       </li>
@@ -266,12 +266,12 @@
           <span class="impl-icon">07 — Mask Inventory</span>
           <div class="impl-text">
             <strong>Struct-Based Collection System</strong>
-            Four Oni masks tracked in a struct array. SetCollected checks whether a mask has been collected and swaps between dim and bright textures via SetBrushFromTexture. SetSelected toggles the IMGSelectionBox visibility via Branch so players always know which slot is active.
+            Four Oni masks tracked using a struct array with an enum defining each mask type. SetCollected checks whether a mask has been collected and swaps between dim and bright textures via SetBrushFromTexture. SetSelected toggles the IMGSelectionBox visibility via Branch so players always know which slot is active.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/Set Collected Code.png','SetCollected — texture swap on collection')">
-          <img src="media/mask-survival/Set Collected Code.png" alt="SetCollected"/>
-          <span class="impl-media-label">View Blueprint</span>
+        <div class="impl-media" style="display:flex;align-items:center;justify-content:center;background:var(--surface2);flex-direction:column;gap:6px;">
+          <span style="font-size:22px;color:var(--muted);">🖼</span>
+          <span class="impl-media-label" style="position:static;background:none;color:var(--muted);font-size:8px;">Coming Soon</span>
         </div>
       </li>
 
@@ -384,9 +384,9 @@
         <span class="gallery-caption">HandleSenseSound Blueprint</span>
       </div>
 
-      <div class="gallery-item wide" onclick="openLightbox('media/mask-survival/BTS Service That ran on Tick.png','BTService — spline patrol tick')">
-        <img src="media/mask-survival/BTS Service That ran on Tick.png" alt="BTService patrol"/>
-        <span class="gallery-caption">BTService — spline patrol tick</span>
+      <div class="gallery-item wide" onclick="openLightbox('media/mask-survival/Increment Patrol Route.png','IncrementPatrolRoute — spline point arrival system')">
+        <img src="media/mask-survival/Increment Patrol Route.png" alt="IncrementPatrolRoute"/>
+        <span class="gallery-caption">IncrementPatrolRoute — spline point arrival</span>
       </div>
 
       <div class="gallery-item" onclick="openLightbox('media/mask-survival/Increment Patrol Route.png','IncrementPatrolRoute — bidirectional spline travel')">
@@ -451,7 +451,6 @@
     <span class="tech-tag">Blender</span>
     <span class="tech-tag">Ardour</span>
     <span class="tech-tag">Audacity</span>
-    <span class="tech-tag">LANDR</span>
   </div>
   <div class="sidebar-block">
     <p class="sidebar-block-title">Play The Game</p>
