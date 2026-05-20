@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Little Red Hunter — Case Study | Josh Brooks</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  .nav-hamburger span { background: #E32132; }
+  .nav-links a:hover, .nav-links a.active { color: #E32132; border-bottom-color: #E32132; }
+
+  .cs-hero { position:relative; min-height:460px; display:flex; align-items:flex-end; overflow:hidden; }
+  .cs-hero-bg { position:absolute; inset:0; background-size:cover; background-position:center; filter:brightness(0.38) saturate(0.85); transform:scale(1.04); transition:transform 8s ease; }
+  .cs-hero:hover .cs-hero-bg { transform:scale(1.0); }
+  .cs-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 0%,rgba(35,39,47,0.65) 60%,var(--bg-dark) 100%); }
+  .cs-hero-content { position:relative; z-index:2; padding:48px 40px; width:100%; max-width:1200px; margin:0 auto; }
+
+  .cs-back { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; margin-bottom:24px; transition:color 0.2s; }
+  .cs-back:hover { color:var(--cyan); }
+  .cs-badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .cs-chip { font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:4px 10px; border-radius:20px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.08); }
+  .cs-chip.red    { color:#E32132; border-color:rgba(227,33,50,0.4);   background:rgba(132,0,5,0.15); }
+  .cs-chip.purple { color:#a78bfa; border-color:rgba(167,139,250,0.3); background:rgba(167,139,250,0.08); }
+  .cs-chip.green  { color:#4ade80; border-color:rgba(74,222,128,0.3);  background:rgba(74,222,128,0.08); }
+  .cs-title { font-family:var(--font-head); font-weight:700; font-size:clamp(32px,5vw,58px); color:var(--white); line-height:1.05; margin-bottom:12px; }
+  .cs-subtitle { font-size:15px; font-weight:300; color:rgba(255,255,255,0.6); max-width:600px; line-height:1.6; }
+
+  .cs-meta { background:var(--surface); border-bottom:1px solid var(--border); }
+  .cs-meta-inner { max-width:1200px; margin:0 auto; padding:0 40px; display:flex; gap:48px; flex-wrap:wrap; }
+  .cs-meta-item { padding:18px 0; flex-shrink:0; }
+  .cs-meta-label { font-family:var(--font-mono); font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+  .cs-meta-value { font-family:var(--font-mono); font-size:12px; color:var(--white); }
+  .cs-meta-value a { color:var(--cyan); text-decoration:none; transition:opacity 0.2s; }
+  .cs-meta-value a:hover { opacity:0.7; }
+
+  .cs-body { max-width:1200px; margin:0 auto; padding:64px 40px; display:grid; grid-template-columns:1fr 300px; gap:64px; align-items:start; }
+
+  .cs-section { margin-bottom:64px; }
+  .cs-section:last-child { margin-bottom:0; }
+  .cs-section-label { font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#E32132; margin-bottom:10px; opacity:0.9; }
+  .cs-section-title { font-family:var(--font-head); font-weight:700; font-size:22px; color:var(--white); margin-bottom:20px; line-height:1.2; }
+  .cs-section-rule { width:32px; height:2px; background:linear-gradient(90deg,#E32132,transparent); margin-bottom:24px; }
+  .cs-text { font-size:14px; font-weight:300; color:rgba(255,255,255,0.65); line-height:1.8; margin-bottom:16px; }
+  .cs-text:last-child { margin-bottom:0; }
+
+  /* IMPL CARDS */
+  .cs-impl-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:8px; }
+  .cs-impl-list li { display:flex; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--cyan); border-radius:var(--radius-sm); overflow:hidden; transition:border-color 0.2s,box-shadow 0.2s; }
+  .cs-impl-list li:hover { border-left-color:#E32132; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
+  .impl-main { padding:16px 18px; flex:1; min-width:0; }
+  .impl-icon { font-family:var(--font-mono); font-size:10px; color:var(--cyan); letter-spacing:1px; margin-bottom:6px; display:block; }
+  .impl-text { font-size:13px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.6; }
+  .impl-text strong { font-weight:600; color:var(--white); display:block; margin-bottom:4px; }
+
+  .impl-media-video { width:140px; flex-shrink:0; border-left:1px solid var(--border); background:var(--surface2); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:background 0.2s; gap:6px; min-height:100px; }
+  .impl-media-video:hover { background:rgba(34,211,238,0.08); }
+  .impl-media-video .play-icon { font-size:26px; color:var(--cyan); opacity:0.8; transition:opacity 0.2s,transform 0.2s; }
+  .impl-media-video:hover .play-icon { opacity:1; transform:scale(1.1); }
+  .impl-media-video .vid-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); text-align:center; padding:0 8px; }
+
+  /* IMPACT */
+  .cs-impact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:8px; }
+  .impact-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px 12px; text-align:center; transition:border-color 0.3s,box-shadow 0.3s; }
+  .impact-card:hover { border-color:rgba(34,211,238,0.4); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  .impact-num { font-family:var(--font-head); font-weight:700; font-size:26px; color:var(--cyan); line-height:1; margin-bottom:6px; }
+  .impact-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); line-height:1.4; }
+
+  /* TAKEAWAY */
+  .cs-takeaway { background:var(--surface); border:1px solid var(--border); border-left:4px solid #E32132; border-radius:var(--radius); padding:28px 28px 28px 24px; margin-top:8px; }
+  .cs-takeaway p { font-size:14px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.8; margin-bottom:14px; }
+  .cs-takeaway p:last-child { margin-bottom:0; }
+
+  /* GALLERY */
+  .gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .gallery-video { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); position:relative; padding-top:56.25%; background:var(--surface2); }
+  .gallery-video.wide { grid-column:span 2; }
+  .gallery-video iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+  .gallery-section-label { grid-column:span 2; font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); padding-top:8px; border-top:1px solid var(--border); margin-top:4px; }
+  .gallery-item { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); background:var(--surface2); position:relative; cursor:pointer; transition:border-color 0.2s,transform 0.2s; }
+  .gallery-item:hover { border-color:rgba(34,211,238,0.4); transform:translateY(-2px); }
+  .gallery-item.wide { grid-column:span 2; }
+  .gallery-item img { width:100%; display:block; object-fit:cover; min-height:120px; max-height:280px; }
+  .gallery-caption { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.72); padding:8px 12px; font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.7); opacity:0; transition:opacity 0.2s; }
+  .gallery-item:hover .gallery-caption { opacity:1; }
+
+  /* LIGHTBOX */
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.94); z-index:999; align-items:center; justify-content:center; padding:24px; }
+  .lightbox.open { display:flex; }
+  .lightbox img { max-width:90vw; max-height:85vh; border-radius:var(--radius-sm); object-fit:contain; }
+  .lightbox-close { position:absolute; top:20px; right:24px; font-family:var(--font-mono); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); cursor:pointer; background:none; border:none; transition:color 0.2s; }
+  .lightbox-close:hover { color:var(--white); }
+
+  /* SIDEBAR */
+  .cs-sidebar { position:sticky; top:80px; display:flex; flex-direction:column; gap:20px; }
+  .sidebar-block { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+  .sidebar-block-title { font-family:var(--font-mono); font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--cyan); opacity:0.7; margin-bottom:14px; }
+  .tech-tag { display:inline-block; font-family:var(--font-mono); font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:4px 8px; border-radius:4px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.06); margin:0 4px 6px 0; }
+  .sidebar-link { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border); color:var(--white); text-decoration:none; font-size:12px; font-weight:600; letter-spacing:1px; transition:background 0.2s,border-color 0.2s; margin-bottom:8px; }
+  .sidebar-link:last-child { margin-bottom:0; }
+  .sidebar-link:hover { background:rgba(34,211,238,0.08); border-color:rgba(34,211,238,0.4); }
+  .sidebar-link .link-icon { font-size:14px; color:var(--cyan); }
+
+  /* PAGINATION */
+  .cs-pagination { max-width:1200px; margin:0 auto; padding:32px 40px 64px; display:flex; justify-content:space-between; align-items:center; gap:16px; border-top:1px solid var(--border); }
+  .cs-pag-btn { display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+  .cs-pag-btn:hover { color:var(--cyan); }
+  .cs-pag-btn .pag-title { font-family:var(--font-head); font-size:13px; font-weight:600; color:var(--white); letter-spacing:0; text-transform:none; display:block; margin-top:3px; }
+
+  @media (max-width:900px) {
+    .cs-body { grid-template-columns:1fr; gap:40px; padding:40px 20px; }
+    .cs-sidebar { position:static; }
+    .cs-hero-content { padding:32px 20px; }
+    .cs-meta-inner { padding:0 20px; gap:24px; }
+    .cs-impact-grid { grid-template-columns:repeat(2,1fr); }
+    .cs-pagination { padding:24px 20px 48px; }
+    .gallery-grid { grid-template-columns:1fr; }
+    .gallery-item.wide,.gallery-video.wide,.gallery-section-label { grid-column:span 1; }
+    .impl-media-video { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-logo">
+    <img src="https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/users/c1eed976-c0aa-4ad0-b243-b94461a41cc9/design-previews/214d02a4-6cc4-48d9-95d4-596dc8450f7b/1761703744191-transparentThumbnail.png" alt="Josh Brooks Logo"/>
+    <span class="nav-logo-text">Josh Brooks</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="professional.html" class="active">Professional</a></li>
+    <li><a href="personal.html">Personal</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="cs-hero">
+  <div class="cs-hero-bg" style="background-image:url('https://static.wixstatic.com/media/c1eed9_048575622e5540bda8d46e5e1c1c91e8~mv2.png');"></div>
+  <div class="cs-hero-content">
+    <a class="cs-back" href="professional.html">← Back to Professional Projects</a>
+    <div class="cs-badge-row">
+      <span class="cs-chip">Professional</span>
+      <span class="cs-chip">UE5</span>
+      <span class="cs-chip">Blueprints</span>
+      <span class="cs-chip purple">Lead Programmer</span>
+      <span class="cs-chip green">In Development</span>
+    </div>
+    <h1 class="cs-title">Little Red Hunter</h1>
+    <p class="cs-subtitle">The second game in production for Ayo Games Studios — a roguelite action game currently in pre-production. I serve as Lead Programmer, building the core gameplay systems from the ground up.</p>
+  </div>
+</div>
+
+<!-- META BAR -->
+<div class="cs-meta">
+  <div class="cs-meta-inner">
+    <div class="cs-meta-item"><p class="cs-meta-label">Timeline</p><p class="cs-meta-value">2025 — TBA</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Role</p><p class="cs-meta-value">Lead Programmer</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Studio</p><p class="cs-meta-value">Ayo Games Studios</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Engine</p><p class="cs-meta-value">Unreal Engine 5</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Genre</p><p class="cs-meta-value">Roguelite Action</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Status</p><p class="cs-meta-value">Pre-Production</p></div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="cs-body">
+<main>
+
+  <!-- PURPOSE -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 01</p>
+    <h2 class="cs-section-title">Purpose</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Little Red Hunter is the second title in production at Ayo Games Studios, and my first project as Lead Programmer. Where Shattered Melodies taught me how to work within a team's production pipeline, Little Red Hunter is where I'm responsible for defining it — architecting the core systems that every other programmer and designer will build on top of.</p>
+    <p class="cs-text">The game is a roguelite action title, which places specific demands on the systems underneath: health and damage need to be reusable across any actor, turrets need to be configurable without touching code, inventory and pickups need to feel responsive, and boss encounters need distinct visual identity. Every system is built modular first so the team can extend it without breaking what already works.</p>
+    <p class="cs-text">This project also represents my first time managing a 22 GB shared codebase across multiple branches — coordinating the Git workflow, reviewing systems written by teammates, and ensuring the architecture stays coherent as the team grows.</p>
+  </div>
+
+  <!-- IMPLEMENTATION -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 02</p>
+    <h2 class="cs-section-title">Implementation</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Each system was designed with extensibility in mind — built to be attached, configured, and extended by the team without modifying core logic.</p>
+    <ul class="cs-impl-list">
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">01 — Boss Enemy Health Bar</span>
+          <div class="impl-text">
+            <strong>Dual-Widget Segmented Health System</strong>
+            Built with two widget blueprints — WBP_BossHealthBar manages the overall UI container, while WBP_BossHealthSegments dynamically populates and updates segments based on the boss's current HP. Each segment fades or depletes as thresholds are crossed. The system is fully modular — designers set total health, segment count, and visual style per boss without touching Blueprint logic.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('_NnDBGapE_4')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">02 — Item Pickup Notification & Inventory</span>
+          <div class="impl-text">
+            <strong>Layered UI with Actor Component Backend</strong>
+            Item notifications are added to an array, animated to fade in and out, and display the item's name, icon, and current count. The inventory is managed through an Actor Component that communicates with the UI widget — ensuring consistent updates whenever items are collected. Designed so any actor can own the inventory component without custom wiring.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('f0jLUGslkpk')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">03 — Health & Damage System</span>
+          <div class="impl-text">
+            <strong>Modular Actor Component</strong>
+            Built as a modular Actor Component that initializes health on Begin Play and processes incoming damage. Attach it to any actor — player, enemy, destructible object — and it handles the full health lifecycle without modification. Provides the foundation for the game's combat loop and interfaces directly with the boss health bar and damage feedback systems.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('z8x14z5g1zQ')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">04 — Modular Turret System</span>
+          <div class="impl-text">
+            <strong>360° Configurable Bullet Streams</strong>
+            Supports up to 10 bullet streams with adjustable firing speed and rotation. Uses a modular 360° spawn system with parameters for stream count, rotation direction, fire rate, and difficulty scaling. Projectiles curve toward the player, creating dynamic hazards that scale naturally across roguelite difficulty tiers without additional Blueprint logic per turret variant.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('xPQG6Ium1YQ')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">05 — Enemy AI & Strafing</span>
+          <div class="impl-text">
+            <strong>Behavior Tree with EQS Strafe Logic</strong>
+            Enemy AI built with Behavior Trees for state management — patrol, engage, and strafe states. EQS (Environment Query System) drives strafe positioning, selecting valid lateral positions relative to the player to create reactive, tactical movement. Paired with hit registration via capsule collisions for weapon and body interactions.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('Sr_j4ZMnW0w')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">06 — Opening Cutscene</span>
+          <div class="impl-text">
+            <strong>Sequencer-Driven Intro Cinematic</strong>
+            Built using UE5's Sequencer to choreograph the opening cinematic — camera cuts, character blocking, timed audio events, and environmental animation. Triggers on game start with a full input lock, handing control back to the player cleanly on completion.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('3enIPtaj6gQ')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- IMPACT -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 03</p>
+    <h2 class="cs-section-title">Impact</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">As Lead Programmer, every core system in Little Red Hunter runs through my architecture. The modular component approach means the team can extend any system without breaking existing functionality — a direct application of lessons learned from Shattered Melodies.</p>
+    <div class="cs-impact-grid">
+      <div class="impact-card"><p class="impact-num">6</p><p class="impact-label">Core Systems Built</p></div>
+      <div class="impact-card"><p class="impact-num">22GB</p><p class="impact-label">Shared Codebase</p></div>
+      <div class="impact-card"><p class="impact-num">Lead</p><p class="impact-label">Programmer Role</p></div>
+      <div class="impact-card"><p class="impact-num">UE5</p><p class="impact-label">Blueprints + GAS Roadmap</p></div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 04</p>
+    <h2 class="cs-section-title">Media Gallery</h2>
+    <div class="cs-section-rule"></div>
+    <div class="gallery-grid">
+
+      <p class="gallery-section-label">System Clips</p>
+
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/_NnDBGapE_4" title="Boss Enemy Health Bar" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/f0jLUGslkpk" title="Item Pickup Notification" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/z8x14z5g1zQ" title="Health & Damage System" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/xPQG6Ium1YQ" title="Modular Turret System" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/Sr_j4ZMnW0w" title="Enemy AI & Strafing" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/3enIPtaj6gQ" title="Opening Cutscene" allowfullscreen></iframe>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 05</p>
+    <h2 class="cs-section-title">Takeaway</h2>
+    <div class="cs-section-rule"></div>
+    <div class="cs-takeaway">
+      <p>Little Red Hunter is where the lessons from Shattered Melodies get applied at a higher level. On Shattered Melodies I built systems within someone else's architecture. On Little Red Hunter I am the architecture — every decision I make about how components communicate, how data flows, and how systems stay decoupled determines how well the rest of the team can work.</p>
+      <p>The shift to Lead Programmer also means thinking about code differently. A system isn't done when it works for my use case — it's done when a designer can configure it, another programmer can extend it, and neither of them needs to ask me how. The modular Actor Component approach for health and inventory came directly from that constraint.</p>
+      <p>Managing a 22 GB shared codebase across multiple branches has also been a significant technical growth area — coordinating Git workflow, handling merge conflicts across systems, and keeping the main branch stable while features are in progress. That's a different kind of problem than writing good code, and it matters just as much in production.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- SIDEBAR -->
+<aside class="cs-sidebar">
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Tech Stack</p>
+    <span class="tech-tag">Unreal Engine 5</span>
+    <span class="tech-tag">Blueprints</span>
+    <span class="tech-tag">Behavior Trees</span>
+    <span class="tech-tag">EQS</span>
+    <span class="tech-tag">Actor Components</span>
+    <span class="tech-tag">Sequencer</span>
+    <span class="tech-tag">Git LFS</span>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Studio</p>
+    <a class="sidebar-link" href="https://github.com/AyoGamesStudio" target="_blank" rel="noopener">
+      <span class="link-icon">⌥</span> AyoGamesStudio on GitHub
+    </a>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Role</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Lead Programmer. Responsible for core system architecture, code review, and Git workflow across the team.</p>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Next Steps</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Migrating combat systems to C++ and Gameplay Ability System (GAS) as the project moves toward vertical slice.</p>
+  </div>
+</aside>
+</div>
+
+<!-- PAGINATION -->
+<div class="cs-pagination">
+  <a class="cs-pag-btn" href="case-shattered-melodies.html">
+    ← <div><span>Previous</span><span class="pag-title">Shattered Melodies</span></div>
+  </a>
+  <a class="cs-pag-btn" href="professional.html">
+    <div style="text-align:right;"><span>Back to</span><span class="pag-title">Professional Projects</span></div> →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-copy">© 2024 Josh Brooks — Game Developer</p>
+  <div class="footer-links">
+    <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
+    <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<!-- VIDEO MODAL -->
+<div class="lightbox" id="videoModal" onclick="closeVideoModal()">
+  <button class="lightbox-close" onclick="closeVideoModal()">✕ Close</button>
+  <div style="width:min(900px,90vw);aspect-ratio:16/9;border-radius:var(--radius-sm);overflow:hidden;" onclick="event.stopPropagation()">
+    <iframe id="videoFrame" src="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  function openVideoModal(videoId) {
+    document.getElementById('videoFrame').src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+    document.getElementById('videoModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideoModal() {
+    document.getElementById('videoFrame').src = '';
+    document.getElementById('videoModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeVideoModal();
+  });
+</script>
+</body>
+</html>
