@@ -185,8 +185,8 @@
             Four enemy factions with Passive, Investigating, and Chasing states using Blackboard-based conditions with self-abort for clean priority-driven transitions. When one enemy detects the player, nearby faction members escalate without scripted triggers.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/Enemy_Behavior_Tree.png','Enemy Behavior Tree — three-state AI architecture')">
-          <img src="media/mask-survival/Enemy_Behavior_Tree.png" alt="Behavior Tree"/>
+        <div class="impl-media" onclick="openLightbox('media/mask-survival/Enemy Behavior Tree.png','Enemy Behavior Tree — three-state AI architecture')">
+          <img src="media/mask-survival/Enemy Behavior Tree.png" alt="Behavior Tree"/>
           <span class="impl-media-label">View BT</span>
         </div>
       </li>
@@ -213,8 +213,8 @@
             A shared CanSenseActor function queries AIPerception, loops through sensed actor info, checks sense class via a Select node (AISight vs AIHearing), and returns both a Sensed bool and the Stimulus. Centralizes perception logic and keeps it reusable across all enemy types.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/Can_See_Actor.png','CanSenseActor — reusable perception function')">
-          <img src="media/mask-survival/Can_See_Actor.png" alt="CanSenseActor"/>
+        <div class="impl-media" onclick="openLightbox('media/mask-survival/Can See Actor.png','CanSenseActor — reusable perception function')">
+          <img src="media/mask-survival/Can See Actor.png" alt="CanSenseActor"/>
           <span class="impl-media-label">View Blueprint</span>
         </div>
       </li>
@@ -227,8 +227,8 @@
             When a sound event fires the enemy plays an alert cue, checks current state via GetCurrentState, and uses Switch on E_AIState to decide whether to escalate to Investigating. Prevents already-chasing enemies from downgrading state on a new sound stimulus.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/Sense_Sound.png','HandleSenseSound Blueprint')">
-          <img src="media/mask-survival/Sense_Sound.png" alt="HandleSenseSound"/>
+        <div class="impl-media" onclick="openLightbox('media/mask-survival/Sense Sound.png','HandleSenseSound Blueprint')">
+          <img src="media/mask-survival/Sense Sound.png" alt="HandleSenseSound"/>
           <span class="impl-media-label">View Blueprint</span>
         </div>
       </li>
@@ -241,8 +241,8 @@
             Patrol routes use spline components. A BTService reads the current Blackboard patrol index on Tick, gets world position via GetLocationAtSplinePoint, projects it to navigation, and sets the patrol target vector. IncrementPatrolRoute handles bidirectional travel — direction 1 moves forward, -1 reverses — flipping at either spline end.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/BTS_Service_That_ran_on_Tick.png','BTService patrol tick Blueprint')">
-          <img src="media/mask-survival/BTS_Service_That_ran_on_Tick.png" alt="BTService patrol"/>
+        <div class="impl-media" onclick="openLightbox('media/mask-survival/BTS Service That ran on Tick.png','BTService patrol tick Blueprint')">
+          <img src="media/mask-survival/BTS Service That ran on Tick.png" alt="BTService patrol"/>
           <span class="impl-media-label">View Blueprint</span>
         </div>
       </li>
@@ -255,8 +255,8 @@
             Dynamic NavMesh runtime mode caused the mesh to shift the moment gameplay started, locking enemies out of an entire side of the level — even though placement looked correct in editor. Switching to Static runtime mode fixed it entirely. The in-editor spline patrol debug view confirmed enemy paths now covered the full intended territory.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/NavMesh_Error.png','NavMesh error — spline patrol debug view')">
-          <img src="media/mask-survival/NavMesh_Error.png" alt="NavMesh debug"/>
+        <div class="impl-media" onclick="openLightbox('media/mask-survival/NavMesh Error.png','NavMesh error — spline patrol debug view')">
+          <img src="media/mask-survival/NavMesh Error.png" alt="NavMesh debug"/>
           <span class="impl-media-label">View Debug</span>
         </div>
       </li>
@@ -269,8 +269,8 @@
             Four Oni masks tracked in a struct array. SetCollected checks whether a mask has been collected and swaps between dim and bright textures via SetBrushFromTexture. SetSelected toggles the IMGSelectionBox visibility via Branch so players always know which slot is active.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/Set_Collected_Code.png','SetCollected — texture swap on collection')">
-          <img src="media/mask-survival/Set_Collected_Code.png" alt="SetCollected"/>
+        <div class="impl-media" onclick="openLightbox('media/mask-survival/Set Collected Code.png','SetCollected — texture swap on collection')">
+          <img src="media/mask-survival/Set Collected Code.png" alt="SetCollected"/>
           <span class="impl-media-label">View Blueprint</span>
         </div>
       </li>
@@ -297,8 +297,8 @@
             Original Oni lantern modeled in Blender using shrinkwrap modifier for rib topology and kanji embossing. Exported to UE5 with a translucent emissive material. Nanite disabled for correct translucency rendering.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/mask-survival/lantern_final.png','Oni lantern — final UE5 render')">
-          <img src="media/mask-survival/lantern_final.png" alt="Oni lantern"/>
+        <div class="impl-media" onclick="openLightbox('media/mask-survival/lantern final.png','Oni lantern — final UE5 render')">
+          <img src="media/mask-survival/lantern final.png" alt="Oni lantern"/>
           <span class="impl-media-label">View Asset</span>
         </div>
       </li>
@@ -332,23 +332,23 @@
         <span class="gallery-caption">Blood moon gameplay screen</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/level_layout.png','Top-down level layout — faction zones')">
-        <img src="media/mask-survival/level_layout.png" alt="Level layout"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/level layout.png','Top-down level layout — faction zones')">
+        <img src="media/mask-survival/level layout.png" alt="Level layout"/>
         <span class="gallery-caption">Top-down level layout</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/blood_moon.png','Blood moon — custom asset')">
-        <img src="media/mask-survival/blood_moon.png" alt="Blood moon"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/blood moon.png','Blood moon — custom asset')">
+        <img src="media/mask-survival/blood moon.png" alt="Blood moon"/>
         <span class="gallery-caption">Blood moon — custom asset</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/lantern_correct.png','Oni lantern — Blender wireframe')">
-        <img src="media/mask-survival/lantern_correct.png" alt="Lantern wireframe"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/lantern correct.png','Oni lantern — Blender wireframe')">
+        <img src="media/mask-survival/lantern correct.png" alt="Lantern wireframe"/>
         <span class="gallery-caption">Oni lantern — Blender wireframe</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/lantern_final.png','Oni lantern — final UE5 render')">
-        <img src="media/mask-survival/lantern_final.png" alt="Lantern final"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/lantern final.png','Oni lantern — final UE5 render')">
+        <img src="media/mask-survival/lantern final.png" alt="Lantern final"/>
         <span class="gallery-caption">Oni lantern — final render</span>
       </div>
 
@@ -364,53 +364,53 @@
 
       <p class="gallery-section-label">Blueprint Documentation</p>
 
-      <div class="gallery-item wide" onclick="openLightbox('media/mask-survival/Enemy_Behavior_Tree.png','Enemy Behavior Tree — full AI state architecture')">
-        <img src="media/mask-survival/Enemy_Behavior_Tree.png" alt="Behavior Tree"/>
+      <div class="gallery-item wide" onclick="openLightbox('media/mask-survival/Enemy Behavior Tree.png','Enemy Behavior Tree — full AI state architecture')">
+        <img src="media/mask-survival/Enemy Behavior Tree.png" alt="Behavior Tree"/>
         <span class="gallery-caption">Behavior Tree — full AI state machine</span>
       </div>
 
-      <div class="gallery-item wide" onclick="openLightbox('media/mask-survival/AI_Perception-Controller.png','OnPerceptionUpdated — full perception event loop')">
-        <img src="media/mask-survival/AI_Perception-Controller.png" alt="OnPerceptionUpdated"/>
+      <div class="gallery-item wide" onclick="openLightbox('media/mask-survival/AI Perception-Controller.png','OnPerceptionUpdated — full perception event loop')">
+        <img src="media/mask-survival/AI Perception-Controller.png" alt="OnPerceptionUpdated"/>
         <span class="gallery-caption">OnPerceptionUpdated — full event loop</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Can_See_Actor.png','CanSenseActor — reusable sense function')">
-        <img src="media/mask-survival/Can_See_Actor.png" alt="CanSenseActor"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Can See Actor.png','CanSenseActor — reusable sense function')">
+        <img src="media/mask-survival/Can See Actor.png" alt="CanSenseActor"/>
         <span class="gallery-caption">CanSenseActor function</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Sense_Sound.png','HandleSenseSound — state-aware response')">
-        <img src="media/mask-survival/Sense_Sound.png" alt="HandleSenseSound"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Sense Sound.png','HandleSenseSound — state-aware response')">
+        <img src="media/mask-survival/Sense Sound.png" alt="HandleSenseSound"/>
         <span class="gallery-caption">HandleSenseSound Blueprint</span>
       </div>
 
-      <div class="gallery-item wide" onclick="openLightbox('media/mask-survival/BTS_Service_That_ran_on_Tick.png','BTService — spline patrol tick')">
-        <img src="media/mask-survival/BTS_Service_That_ran_on_Tick.png" alt="BTService patrol"/>
+      <div class="gallery-item wide" onclick="openLightbox('media/mask-survival/BTS Service That ran on Tick.png','BTService — spline patrol tick')">
+        <img src="media/mask-survival/BTS Service That ran on Tick.png" alt="BTService patrol"/>
         <span class="gallery-caption">BTService — spline patrol tick</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Increment_Patrol_Route.png','IncrementPatrolRoute — bidirectional spline travel')">
-        <img src="media/mask-survival/Increment_Patrol_Route.png" alt="IncrementPatrolRoute"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Increment Patrol Route.png','IncrementPatrolRoute — bidirectional spline travel')">
+        <img src="media/mask-survival/Increment Patrol Route.png" alt="IncrementPatrolRoute"/>
         <span class="gallery-caption">IncrementPatrolRoute — bidirectional</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Get_Spline_Position.png','GetSplinePointAsWorldPosition function')">
-        <img src="media/mask-survival/Get_Spline_Position.png" alt="GetSplinePoint"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Get Spline Position.png','GetSplinePointAsWorldPosition function')">
+        <img src="media/mask-survival/Get Spline Position.png" alt="GetSplinePoint"/>
         <span class="gallery-caption">GetSplinePointAsWorldPosition</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/NavMesh_Error.png','NavMesh — spline patrol debug view showing blockout issue')">
-        <img src="media/mask-survival/NavMesh_Error.png" alt="NavMesh debug"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/NavMesh Error.png','NavMesh — spline patrol debug view showing blockout issue')">
+        <img src="media/mask-survival/NavMesh Error.png" alt="NavMesh debug"/>
         <span class="gallery-caption">NavMesh — patrol debug view</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Set_Collected_Code.png','SetCollected — texture swap on mask collection')">
-        <img src="media/mask-survival/Set_Collected_Code.png" alt="SetCollected"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Set Collected Code.png','SetCollected — texture swap on mask collection')">
+        <img src="media/mask-survival/Set Collected Code.png" alt="SetCollected"/>
         <span class="gallery-caption">SetCollected — texture swap</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/SelectionBox_Code.png','SetSelected — selection box visibility toggle')">
-        <img src="media/mask-survival/SelectionBox_Code.png" alt="SetSelected"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/SelectionBox Code.png','SetSelected — selection box visibility toggle')">
+        <img src="media/mask-survival/SelectionBox Code.png" alt="SetSelected"/>
         <span class="gallery-caption">SetSelected — UI visibility</span>
       </div>
 
@@ -419,8 +419,8 @@
         <span class="gallery-caption">Win condition Blueprint</span>
       </div>
 
-      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Lose_Conditons.png','Lose condition — full UI and pause flow')">
-        <img src="media/mask-survival/Lose_Conditons.png" alt="Lose condition"/>
+      <div class="gallery-item" onclick="openLightbox('media/mask-survival/Lose Conditons.png','Lose condition — full UI and pause flow')">
+        <img src="media/mask-survival/Lose Conditons.png" alt="Lose condition"/>
         <span class="gallery-caption">Lose condition Blueprint</span>
       </div>
 
