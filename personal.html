@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-
+ 
 <nav class="site-nav">
   <div class="nav-logo">
     <img src="https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/users/c1eed976-c0aa-4ad0-b243-b94461a41cc9/design-previews/214d02a4-6cc4-48d9-95d4-596dc8450f7b/1761703744191-transparentThumbnail.png" alt="Josh Brooks Logo"/>
@@ -24,7 +24,7 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
-
+ 
 <!-- PAGE HEADER -->
 <div class="section" style="padding-bottom:20px;">
   <p class="section-label">// solo & experimental work</p>
@@ -34,7 +34,7 @@
     A collection of projects born from curiosity and creative sparks — built on impulse or experimentation to showcase growth, ideas, and passion beyond formal work.
   </p>
 </div>
-
+ 
 <!-- SCROLLER -->
 <div class="scroller-section">
   <div class="scroller-wrap">
@@ -46,39 +46,39 @@
     <button class="s-btn" id="perNext">&#8594;</button>
   </div>
 </div>
-
+ 
 <footer class="site-footer">
-  <p class="footer-copy">© 2024 Josh Brooks — Game Developer</p>
+  <p class="footer-copy">© 2026 Josh Brooks — Game Developer</p>
   <div class="footer-links">
     <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
     <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
   </div>
 </footer>
-
+ 
 <script src="scroller.js"></script>
 <script>
 /* ================================================================
    ✏️  EDIT PERSONAL PROJECTS HERE
    ================================================================ */
 const PER_PROJECTS = [
-
+ 
   {
     title:      "Pong in C++",
-    year:       "2025",
+    year:       "2026",
     badge:      "Personal",
     badgeClass: "personal",
-    desc:       "Pong built from scratch in C++ using SDL2. Core game loop, delta-time paddle movement, ball collision, score tracking, win conditions, and on-screen text rendering.",
+    desc:       "Pong built from scratch in C++ using SDL3 — covering the game loop, delta-time movement, collision detection, paddle AI, and score rendering. Based on Chapter 1 of Game Programming in C++ by Sanjay Madhav.",
     ctaLabel:   "View Git Repo",
     ctaLink:    "https://github.com/FearWydk/Pong",
     tags: [
       { label:"C++",    color:"" },
-      { label:"SDL2",   color:"" },
-      { label:"GitHub", color:"g", link:"#" },
+      { label:"SDL3",   color:"" },
+      { label:"GitHub", color:"g", link:"https://github.com/FearWydk/Pong" },
     ],
-    media:{ type:"image", src:"https://static.wixstatic.com/media/c1eed9_5e14e42614c040a6ab06bf14bb7b83f5~mv2.png", alt:"Pong in C++" }
+    media:{ type:"image", src:"media/Pong/pong.png", alt:"Pong in C++ with SDL3" }
   },
-  
+ 
   {
     title:      "Mask Survival",
     year:       "2026",
@@ -96,7 +96,7 @@ const PER_PROJECTS = [
     ],
     media:{ type:"image", src:"https://static.wixstatic.com/media/c1eed9_f69158f7b1974edf858ec41639141a87~mv2.jpg", alt:"Mask Survival" }
   },
-
+ 
   {
     title:      "KH-Style Segmented Healthbar",
     year:       "2025",
@@ -112,16 +112,14 @@ const PER_PROJECTS = [
     ],
     media:{ type:"image", src:"https://static.wixstatic.com/media/c1eed9_73317474244c44c6a26841f8d8acedb8~mv2.jpg", alt:"KH Enemy - Healthbar Tutorial" }
   },
-
-  
-
+ 
   /* ── ADD NEW PERSONAL PROJECT HERE ── */
-
+ 
 ];
 /* ================================================================
    ✏️  END OF EDITABLE SECTION
    ================================================================ */
-
+ 
 document.addEventListener('DOMContentLoaded', () => {
   initScroller('perTrack', 'perDots', 'perPrev', 'perNext', PER_PROJECTS);
   document.getElementById('hamburger').addEventListener('click', () => {
